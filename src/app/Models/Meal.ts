@@ -1,7 +1,5 @@
 export class Meal {
-    ProdID: String;
-    name: String[];
-    Count: number;
+    Product: string;
     Resturant: string;
-    Meal: string;
+    Count: number;
 }

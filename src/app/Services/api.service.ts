@@ -4,10 +4,13 @@ import { Meal } from "../Models/Meal";
 import { BehaviorSubject, Observable } from "rxjs";
 import { Router } from "@angular/router";
 
+const api = 'http://10.109.195.245:5000';
+
 @Injectable({
   providedIn: "root",
 })
 export class ApiService {
+
   public $isLoggedIn = new BehaviorSubject(false);
   public $loggedResturant = new BehaviorSubject<any>(null);
 
@@ -16,11 +19,11 @@ export class ApiService {
   constructor(private http: HttpClient, private router: Router) {}
 
   getData(): Observable<Meal[]> {
-    return this.http.get<Meal[]>("../../assets/data.json");
+    return this.http.get<Meal[]>(`${api}/getmealscount`);
   }
 
   getResturants() {
-    return this.http.get("../../assets/resturants.json");
+    return this.http.get(`${api}/data`);
   }
 
   login(resturant) {

@@ -40,24 +40,20 @@ export class ProdAmountReportComponent implements OnInit {
     this.resultsActive = true;
     console.log("logged ", this.loggedRest);
     this.isLoading = true;
-    setTimeout(() => {
-      this.api.getData().subscribe((w: Meal[]) => {
-        this.dataSource = w
-          .map((x) => {
-            return { Meal: x.name[1], Resturant: x.name[0], Count: x.Count };
-          })
-          .filter((m) => {
-            return m.Resturant === this.loggedRest;
-          });
-        this.isLoading = false;
-        this.sortedData = this.dataSource.slice();
-        this.length = this.dataSource.length;
-        console.log("w", this.dataSource);
-        this.totalMeals = this.dataSource.reduce((a, b: Meal) => {
-          return a + b.Count;
-        }, 0);
-      });
-    }, 1500);
+    this.api.getData().subscribe((w: Meal[]) => {
+      console.log("w", w);
+      this.dataSource = w
+        .filter((m) => {
+          return m.Resturant === this.loggedRest;
+        });
+      this.isLoading = false;
+      this.sortedData = this.dataSource.slice();
+      this.length = this.dataSource.length;
+      console.log("w", this.dataSource);
+      this.totalMeals = this.dataSource.reduce((a, b: Meal) => {
+        return a + b.Count;
+      }, 0);
+    });
   }
 
   sortData(sort: Sort) {
