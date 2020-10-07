@@ -1,0 +1,13 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>דוחות</span>
+    <div class="logo">
+      <div>LC52</div>
+      <div class="items" *ngIf="isLoggedIn">
+        {{ loggedRest }}
+        <mat-icon (click)="logout()">exit_to_app</mat-icon>
+      </div>
+    </div>
+    <span class="example-spacer"></span>
+  </mat-toolbar-row>
+</mat-toolbar>

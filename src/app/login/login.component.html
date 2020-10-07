@@ -1,0 +1,26 @@
+<app-main></app-main>
+<div class="container">
+  <mat-card>
+    <form [formGroup]="loginForm">
+      <mat-form-field appearance="fill">
+        <mat-label>מסעדה</mat-label>
+        <mat-select formControlName="resturant">
+          <mat-option *ngFor="let item of resturants" [value]="item.name">
+            {{ item.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="סיסמא"
+          type="password"
+          formControlName="password"
+        />
+      </mat-form-field>
+      <br /><br />
+      <button mat-raised-button color="primary" (click)="login()">כניסה</button>
+    </form>
+  </mat-card>
+</div>

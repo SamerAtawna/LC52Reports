@@ -1,0 +1,24 @@
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:80%;
+    flex-direction: column;
+}
+mat-form-field{
+    direction: rtl;
+    text-align: right;
+}
+button{
+    width:180px;
+}
+mat-card form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+mat-card{
+    height: 50%;
+    width: 30%;
+}
