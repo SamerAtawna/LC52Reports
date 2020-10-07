@@ -4,9 +4,11 @@
     height: 80vh;
     align-items: center;
 }
-
-.date-select {
-    width: 74%;
+.date-select{
+    width:100%
+}
+.date-select form{
+    width: 100%;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -62,8 +64,9 @@ mat-form-field{
     font-weight: bold;
     padding-left: 10%;
 }
+
 @media only screen and (max-width: 920px) {
-    .date-select {
+    .date-select form {
         justify-content: space-between;
     }
     .results {

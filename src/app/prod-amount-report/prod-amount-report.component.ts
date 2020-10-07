@@ -4,6 +4,8 @@ import { Sort } from "@angular/material/sort";
 import { Meal } from "../Models/Meal";
 import { ApiService } from "../Services/api.service";
 import { filter, tap } from "rxjs/operators";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-prod-amount-report",
@@ -23,13 +25,18 @@ export class ProdAmountReportComponent implements OnInit {
   loggedRest = null;
   resultsActive = false;
   totalMeals = 0;
+  dateForm: FormGroup;
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService, private _snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.api.$loggedResturant.subscribe((rest) => {
       console.log("rest ", rest);
       this.loggedRest = rest;
+    });
+    this.dateForm = new FormGroup({
+      from: new FormControl("", { validators: Validators.required }),
+      to: new FormControl("", { validators: Validators.required }),
     });
   }
   ngAfterViewInit(): void {
@@ -37,15 +44,21 @@ export class ProdAmountReportComponent implements OnInit {
     //Add 'implements AfterViewInit' to the class.
   }
   showReport() {
+    if (!this.dateForm.valid) {
+      this.openSnackBar("יש לבחור תאריכים");
+      return;
+    }
+    let from = this.styleDate(this.dateForm.get("from").value);
+    let to = this.styleDate(this.dateForm.get("to").value);
+    console.log(from, to);
     this.resultsActive = true;
     console.log("logged ", this.loggedRest);
     this.isLoading = true;
-    this.api.getData().subscribe((w: Meal[]) => {
+    this.api.getData(from, to).subscribe((w: Meal[]) => {
       console.log("w", w);
-      this.dataSource = w
-        .filter((m) => {
-          return m.Resturant === this.loggedRest;
-        });
+      this.dataSource = w.filter((m) => {
+        return m.Resturant === this.loggedRest;
+      });
       this.isLoading = false;
       this.sortedData = this.dataSource.slice();
       this.length = this.dataSource.length;
@@ -88,5 +101,18 @@ export class ProdAmountReportComponent implements OnInit {
         .split(",")
         .map((str) => +str);
     }
+  }
+  openSnackBar(message: string) {
+    this._snackBar.open(message, "", {
+      duration: 2000,
+      direction: "rtl",
+    });
+  }
+
+  styleDate(date: Date) {
+    let day = date.getDate();
+    let month = date.getMonth();
+    let year = date.getFullYear();
+    console.log(`date styled ${month}-${day}-${year}`);
   }
 }

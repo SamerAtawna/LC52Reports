@@ -4,25 +4,30 @@
 </mat-tab-group>
 <div class="container">
   <section class="date-select">
-    <mat-form-field appearance="fill">
-      <mat-label>מתאריך</mat-label>
-      <input matInput [matDatepicker]="frompicker" />
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="frompicker"
-      ></mat-datepicker-toggle>
-      <mat-datepicker #frompicker></mat-datepicker>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>עד תאריך</mat-label>
-      <input matInput [matDatepicker]="topicker" />
-      <mat-datepicker-toggle matSuffix [for]="topicker"></mat-datepicker-toggle>
-      <mat-datepicker #topicker></mat-datepicker>
-    </mat-form-field>
+    <form [formGroup]="dateForm">
+      <mat-form-field appearance="fill">
+        <mat-label>מתאריך</mat-label>
+        <input matInput [matDatepicker]="frompicker" formControlName="from" />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="frompicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #frompicker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>עד תאריך</mat-label>
+        <input matInput [matDatepicker]="topicker" formControlName="to" />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="topicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #topicker></mat-datepicker>
+      </mat-form-field>
 
-    <button mat-raised-button color="primary" (click)="showReport()">
-      חפש
-    </button>
+      <button mat-raised-button color="primary" (click)="showReport()">
+        חפש
+      </button>
+    </form>
   </section>
   <section class="results">
     <div class="spinner" *ngIf="isLoading">

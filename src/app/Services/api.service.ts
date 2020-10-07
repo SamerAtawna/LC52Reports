@@ -18,11 +18,13 @@ export class ApiService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  getData(): Observable<Meal[]> {
-    return this.http.get<Meal[]>(`${api}/getmealscount`);
+  getData(from, to): Observable<Meal[]> {
+    // return this.http.get<Meal[]>(`../../assets/data.json`);
+    return this.http.get<Meal[]>(`${api}/getmealscount?from=${from}&to=${to}`);
   }
 
   getResturants() {
+    // return this.http.get(`../../assets/resturants.json`);
     return this.http.get(`${api}/data`);
   }
 
