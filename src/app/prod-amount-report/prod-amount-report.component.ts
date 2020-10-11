@@ -31,7 +31,6 @@ export class ProdAmountReportComponent implements OnInit {
 
   ngOnInit(): void {
     this.api.$loggedResturant.subscribe((rest) => {
-      console.log("rest ", rest);
       this.loggedRest = rest;
     });
     this.dateForm = new FormGroup({
@@ -50,19 +49,20 @@ export class ProdAmountReportComponent implements OnInit {
     }
     let from = this.styleDate(this.dateForm.get("from").value);
     let to = this.styleDate(this.dateForm.get("to").value);
-    console.log(from, to);
     this.resultsActive = true;
-    console.log("logged ", this.loggedRest);
     this.isLoading = true;
     this.api.getData(from, to).subscribe((w: Meal[]) => {
-      console.log("w", w);
-      this.dataSource = w.filter((m) => {
-        return m.Resturant === this.loggedRest;
-      });
+      if (!(this.loggedRest === "admin")) {
+        this.dataSource = w.filter((m) => {
+          return m.Resturant === this.loggedRest;
+        });
+      } else {
+        this.dataSource = w;
+      }
       this.isLoading = false;
       this.sortedData = this.dataSource.slice();
       this.length = this.dataSource.length;
-      console.log("w", this.dataSource);
+
       this.totalMeals = this.dataSource.reduce((a, b: Meal) => {
         return a + b.Count;
       }, 0);
@@ -70,7 +70,6 @@ export class ProdAmountReportComponent implements OnInit {
   }
 
   sortData(sort: Sort) {
-    console.log(sort);
     const data = this.dataSource.slice();
     if (!sort.active || sort.direction === "") {
       this.sortedData = data;
@@ -111,8 +110,32 @@ export class ProdAmountReportComponent implements OnInit {
 
   styleDate(date: Date) {
     let day = date.getDate();
-    let month = date.getMonth();
+    let month = date.getMonth() + 1;
     let year = date.getFullYear();
-    console.log(`date styled ${month}-${day}-${year}`);
+
+    return `${month}-${day}-${year}`;
+  }
+
+  showToday() {
+    this.resultsActive = true;
+    this.isLoading = true;
+    this.api.getDataToday().subscribe((w: Meal[]) => {
+      console.log("w ", w);
+      console.log("logged ", this.loggedRest);
+      if (!(this.loggedRest === "admin")) {
+        this.dataSource = w.filter((m) => {
+          return m.Resturant === this.loggedRest;
+        });
+      } else {
+        this.dataSource = w;
+      }
+      this.isLoading = false;
+      this.sortedData = this.dataSource.slice();
+      this.length = this.dataSource.length;
+      console.log("sorted ", this.sortData);
+      this.totalMeals = this.dataSource.reduce((a, b: Meal) => {
+        return a + b.Count;
+      }, 0);
+    });
   }
 }

@@ -19,8 +19,14 @@ export class ApiService {
   constructor(private http: HttpClient, private router: Router) {}
 
   getData(from, to): Observable<Meal[]> {
+    console.log("fromto ", from , to );
     // return this.http.get<Meal[]>(`../../assets/data.json`);
     return this.http.get<Meal[]>(`${api}/getmealscount?from=${from}&to=${to}`);
+  }
+
+  getDataToday(){
+    return this.http.get<Meal[]>(`${api}/getmealstoday`);
+
   }
 
   getResturants() {

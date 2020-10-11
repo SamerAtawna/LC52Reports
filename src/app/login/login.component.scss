@@ -21,4 +21,10 @@ mat-card form{
 mat-card{
     height: 50%;
     width: 30%;
+    min-width: 315px;
+}
+.rights{
+  position: absolute;
+  left: 50px;
+  color: #80808070;
 }
