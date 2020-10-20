@@ -4,10 +4,10 @@
     height: 80vh;
     align-items: center;
 }
-.date-select{
-    width:100%
+.date-select {
+    width: 100%;
 }
-.date-select form{
+.date-select form {
     width: 100%;
     display: flex;
     justify-content: space-around;
@@ -56,15 +56,36 @@ table th {
     margin: 100px;
     color: grey;
 }
-mat-form-field{
+mat-form-field {
     text-align: right;
     direction: rtl;
 }
-.total{
+.total {
     font-weight: bold;
     padding-left: 10%;
 }
-
+.admin-filters {
+    background: #8080802e;
+    border-radius: 10px;
+}
+.admin-filters span {
+    clear: both;
+    display: block;
+    /* float: right; */
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+.action-btn {
+    display: flex;
+    align-items: flex-end;
+    width: 80%;
+    justify-content: space-between;
+    align-items: center;
+}
+.action-btn button {
+    margin-left: 15px;
+}
 @media only screen and (max-width: 920px) {
     .date-select form {
         justify-content: space-between;
@@ -72,4 +93,11 @@ mat-form-field{
     .results {
         width: 100%;
     }
+    .action-btn {
+        width: 100%;
+    }
+}
+.break {
+    flex-basis: 100%;
+    height: 0;
 }

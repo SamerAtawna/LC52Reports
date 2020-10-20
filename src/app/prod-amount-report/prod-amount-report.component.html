@@ -23,14 +23,31 @@
         ></mat-datepicker-toggle>
         <mat-datepicker #topicker></mat-datepicker>
       </mat-form-field>
+      <div class="break"></div>
+      <div class="action-btn">
+        <div>
+          <button mat-raised-button color="primary" (click)="showReport()">
+            חפש
+          </button>
+          <button mat-raised-button color="primary" (click)="showToday()">
+            היום
+          </button>
+          <button mat-raised-button color="background" (click)="exportexcel()">
+            יצא ל Excel
+          </button>
+        </div>
 
-      <button mat-raised-button color="primary" (click)="showReport()">
-        חפש
-      </button>
-      <button mat-raised-button color="primary" (click)="showToday()">
-        היום
-      </button>
-
+        <div class="admin-filters" *ngIf="loggedRest === 'admin'">
+          <span><mat-icon aria-hidden="false">filter_alt</mat-icon> סינון</span>
+          <button
+            mat-button
+            *ngFor="let rest of resturants"
+            (click)="filterResturants(rest.name)"
+          >
+            {{ rest.name }}
+          </button>
+        </div>
+      </div>
     </form>
   </section>
   <section class="results">

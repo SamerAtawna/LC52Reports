@@ -6,6 +6,7 @@ import { ApiService } from "../Services/api.service";
 import { filter, tap } from "rxjs/operators";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
+import * as XLSX from "xlsx";
 
 @Component({
   selector: "app-prod-amount-report",
@@ -26,7 +27,9 @@ export class ProdAmountReportComponent implements OnInit {
   resultsActive = false;
   totalMeals = 0;
   dateForm: FormGroup;
-
+  resturants = [];
+  dataFiltered;
+  fileName = "LC52Report.xlsx";
   constructor(private api: ApiService, private _snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
@@ -36,6 +39,10 @@ export class ProdAmountReportComponent implements OnInit {
     this.dateForm = new FormGroup({
       from: new FormControl("", { validators: Validators.required }),
       to: new FormControl("", { validators: Validators.required }),
+    });
+    this.api.getResturants().subscribe((res: any) => {
+      this.resturants = res;
+      console.log("res ", res);
     });
   }
   ngAfterViewInit(): void {
@@ -52,6 +59,7 @@ export class ProdAmountReportComponent implements OnInit {
     this.resultsActive = true;
     this.isLoading = true;
     this.api.getData(from, to).subscribe((w: Meal[]) => {
+      this.dataFiltered = w;
       if (!(this.loggedRest === "admin")) {
         this.dataSource = w.filter((m) => {
           return m.Resturant === this.loggedRest;
@@ -70,7 +78,7 @@ export class ProdAmountReportComponent implements OnInit {
   }
 
   sortData(sort: Sort) {
-    const data = this.dataSource.slice();
+    const data = this.sortedData.slice();
     if (!sort.active || sort.direction === "") {
       this.sortedData = data;
       return;
@@ -120,6 +128,7 @@ export class ProdAmountReportComponent implements OnInit {
     this.resultsActive = true;
     this.isLoading = true;
     this.api.getDataToday().subscribe((w: Meal[]) => {
+      this.dataFiltered = w;
       console.log("w ", w);
       console.log("logged ", this.loggedRest);
       if (!(this.loggedRest === "admin")) {
@@ -133,9 +142,41 @@ export class ProdAmountReportComponent implements OnInit {
       this.sortedData = this.dataSource.slice();
       this.length = this.dataSource.length;
       console.log("sorted ", this.sortData);
-      this.totalMeals = this.dataSource.reduce((a, b: Meal) => {
+      this.totalMeals = this.sortedData.reduce((a, b: Meal) => {
         return a + b.Count;
       }, 0);
     });
+  }
+  filterResturants(rest) {
+    console.log("rest ", rest);
+    this.sortedData = this.dataFiltered.filter((res) => {
+      console.log("ProdAmountReportComponent -> filterResturants -> res", res);
+
+      console.log(res.Resturant === rest);
+      return res.Resturant === rest;
+    });
+    console.log(
+      "ProdAmountReportComponent -> filterResturants -> this.dataSource",
+      this.dataSource
+    );
+    this.totalMeals = this.sortedData.reduce((a, b: Meal) => {
+      return a + b.Count;
+    }, 0);
+  }
+
+  exportexcel(): void {
+    if (this.sortedData.length === 0) {
+      this.openSnackBar("קודם יש להפיק דוח ");
+      return;
+    }
+    let element = document.getElementsByTagName("table")[0];
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+    /* save to file */
+    XLSX.writeFile(wb, this.fileName);
   }
 }
