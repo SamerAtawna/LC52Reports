@@ -4,7 +4,7 @@ import { Meal } from "../Models/Meal";
 import { BehaviorSubject, Observable } from "rxjs";
 import { Router } from "@angular/router";
 
-const api = "http://10.109.195.245:5000";
+const api = "http://10.109.208.27:5000";
 
 @Injectable({
   providedIn: "root",
